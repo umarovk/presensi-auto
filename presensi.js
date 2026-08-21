@@ -85,7 +85,16 @@ async function main() {
   // sampai masuk ke halaman scan QR.
   await page.getByRole("button", { name: "Selanjutnya" }).click({ timeout: 30000 });
 
-  console.log("Browser dibiarkan terbuka di halaman presensi. Silakan scan QR secara fisik.");
+  // Scanner RFID/kartu ngirim data sebagai keystroke ke elemen yang lagi
+  // fokus. Kalau fokusnya masih di address bar (bukan di halaman), hasil
+  // scan bisa nyasar jadi pencarian Google. Jadi pastikan jendela browser
+  // di depan DAN kursor difokuskan ke field scan-nya sebelum dibiarkan idle.
+  const scanBox = page.getByRole("textbox", { name: "Nomor kartu atau nomor RFID" });
+  await scanBox.waitFor({ state: "visible", timeout: 15000 });
+  await page.bringToFront();
+  await scanBox.click();
+
+  console.log("Browser dibiarkan terbuka di halaman presensi, field scan sudah fokus. Siap discan.");
   // Browser sengaja TIDAK ditutup (context.close() tidak dipanggil)
   // supaya tetap standby untuk proses scan.
 }
