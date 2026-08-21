@@ -1,0 +1,14 @@
+{
+  "name": "presensi-auto",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "description": "Auto-login dan buka halaman presensi (siap-scan) untuk smkcokrowanadadi.cazh.id",
+  "scripts": {
+    "start": "node presensi.js",
+    "record": "playwright codegen https://smkcokrowanadadi.cazh.id/login"
+  },
+  "dependencies": {
+    "playwright": "^1.48.0"
+  }
+}
