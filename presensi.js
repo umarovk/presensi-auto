@@ -59,7 +59,7 @@ async function main() {
   const context = await chromium.launchPersistentContext(USER_DATA_DIR, {
     headless: false,
     viewport: null,
-    args: ["--start-maximized"],
+    args: ["--start-fullscreen"],
   });
 
   const page = context.pages()[0] || (await context.newPage());
@@ -89,9 +89,10 @@ async function main() {
   // fokus. Kalau fokusnya masih di address bar (bukan di halaman), hasil
   // scan bisa nyasar jadi pencarian Google. Jadi pastikan jendela browser
   // di depan DAN kursor difokuskan ke field scan-nya sebelum dibiarkan idle.
+  await page.bringToFront();
+
   const scanBox = page.getByRole("textbox", { name: "Nomor kartu atau nomor RFID" });
   await scanBox.waitFor({ state: "visible", timeout: 15000 });
-  await page.bringToFront();
   await scanBox.click();
 
   console.log("Browser dibiarkan terbuka di halaman presensi, field scan sudah fokus. Siap discan.");
